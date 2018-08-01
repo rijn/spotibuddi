@@ -1,2 +1,2 @@
 # spotibuddi
-codes for spotify buddy website
+scripts for spotify buddy website
