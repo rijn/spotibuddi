@@ -64,7 +64,7 @@ def static_file(path):
     else:
         return send_from_directory('build/static', path)
 
-@app.route('/api/<user>/playlists')
+@app.route('/api/user/<user>/playlists')
 @crossdomain(origin='*')
 def playlists(user):
     playlists = sp.user_playlists(user)
@@ -75,7 +75,7 @@ def playlists(user):
     )
     return response
 
-@app.route('/api/<user>')
+@app.route('/api/user/<user>')
 @crossdomain(origin='*')
 def user(user):
     user = sp.user(user)
