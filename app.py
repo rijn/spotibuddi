@@ -32,5 +32,15 @@ def playlists(user):
     )
     return response
 
+@app.route('/api/<user>')
+def user(user):
+    user = sp.user(user)
+    response = app.response_class(
+        response = json.dumps(user),
+        status = 200,
+        mimetype = 'application/json'
+    )
+    return response
+
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
