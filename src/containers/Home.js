@@ -5,7 +5,8 @@ import { fetchUser } from '../api';
 
 class Home extends Component {
   state = {
-    username: '',
+    usernameA: '',
+    usernameB: '',
     loading: false,
     user: null
   }
@@ -13,15 +14,15 @@ class Home extends Component {
   componentDidMount () {
   }
 
-  _fetchUserInfo = async () => {
-    const { username } = this.state;
+  _fetchUserInfo = usernameKey => async () => {
+    const username = this.state[usernameKey];
     this.setState({ loading: true });
     const user = await fetchUser(username);
     this.setState({ loading: false, user });
   }
 
-  _handleUsernameChange = event => {
-    this.setState({ username: event.target.value });
+  _handleUsernameChange = username => event => {
+    this.setState({ [ username ]: event.target.value });
   }
 
   _renderUserProfileCard = () => {
@@ -41,22 +42,38 @@ class Home extends Component {
     )
   }
 
+  _renderUsernameInputBox = (username, prompt) => {
+    return (
+      <div>
+        <div className="Home_prompt">{ prompt }</div>
+        <InputGroup
+          placeholder="Enter your spotify username..."
+          type="text"
+          onChange={this._handleUsernameChange(username)}
+          value={this.state[username]}
+          rightElement={
+            <Button
+              icon="arrow-right"
+              text="Go"
+              onClick={this._fetchUserInfo(username)}
+            />
+          }
+        />
+      </div>
+    );
+  }
+
   render () {
     const { username } = this.state;
     return (
       <div className="Home">
-        <InputGroup
-          placeholder="Enter your spotify username..."
-          rightElement={
-            <Button
-              icon="arrow-right"
-              minimal={true}
-              onClick={this._fetchUserInfo}
-            />
-          }
-          type="text"
-          onChange={this._handleUsernameChange}
-          value={username}
+
+        { this._renderUsernameInputBox('usernameA', 'User 1') }
+        { this._renderUsernameInputBox('usernameB', 'User 2') }
+        <Button
+          icon="arrow-right"
+          text="Go"
+          onClick={this._fetchUserInfo}
         />
         { this._renderUserProfileCard() }
       </div>
