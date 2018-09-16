@@ -1,0 +1,9 @@
+.PlaylistSelector_albumRightImage {
+  max-width: 30px;
+  max-height: 30px;
+}
+
+.PlaylistSelector_menu {
+  overflow-y: scroll;
+  max-height: 300px;
+}
