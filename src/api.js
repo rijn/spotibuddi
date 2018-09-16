@@ -9,4 +9,4 @@ const instance = axios.create({
 
 export const fetchUser = user => instance.get(`user/${user}`).then(get('data'));
 
-export const fetchUserPlaylists = user => instance.get(`user/${user}/playlists`).then(get('data'));
+export const fetchUserPlaylists = (user, offset) => instance.get(`user/${user}/playlists/${offset}`).then(get('data'));

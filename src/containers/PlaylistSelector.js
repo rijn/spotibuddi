@@ -5,6 +5,8 @@ import { InputGroup, Button, Intent, Spinner, MenuItem, Menu } from '@blueprintj
 import { Select } from '@blueprintjs/select';
 import { fetchUserPlaylists } from '../api';
 import _ from 'lodash';
+import Promise from 'bluebird';
+import update from 'immutability-helper';
 
 class PlaylistSelector extends Component {
   static propTypes = {
@@ -14,19 +16,39 @@ class PlaylistSelector extends Component {
   state = {
     loading: false,
     playlists: null,
-    playlist: null
+    playlist: null,
+    fetchUserPlaylistsPromise: null,
+    total: 0
   }
 
   componentDidMount () {
     this._fetchUserPlaylists();
   }
 
-  _fetchUserPlaylists = async () => {
+  componentWillUnmount () {
+    const { fetchUserPlaylistsPromise } = this.state;
+    if (fetchUserPlaylistsPromise) fetchUserPlaylistsPromise.cancel();
+  }
+
+  _fetchUserPlaylists = () => {
     const { username } = this.props;
-    this.setState({ loading: true });
-    let playlists = await fetchUserPlaylists(username);
-    this.setState({ loading: false, playlists });
-    console.log(username, playlists);
+    const { fetchUserPlaylistsPromise, playlists } = this.state;
+    this.setState({
+      loading: true,
+      fetchUserPlaylistsPromise: new Promise((resolve, reject, onCancel) => {
+        resolve(fetchUserPlaylists(username, _.get(playlists, 'length') || 0));
+      }).then(_playlists => {
+        this.setState(update(this.state, {
+          playlists: playlists ? { $push: _.get(_playlists, 'items') } : { $set: _.get(_playlists, 'items') },
+          total: { $set: _playlists.total }
+        }));
+        if (!_playlists.next) {
+          this.setState({ loading: false });
+        } else {
+          return this._fetchUserPlaylists();
+        }
+      })
+    });
   }
 
   _escapeRegExpChars = (text) => {
@@ -104,14 +126,14 @@ class PlaylistSelector extends Component {
   };
 
   render () {
-    const { playlists, playlist } = this.state;
+    const { playlists, playlist, total, loading } = this.state;
     if (!playlists) return null;
-    if (!playlists.items[0]) return null;
+    if (!playlists[0]) return null;
     return (
       <div className="PlaylistSelector">
         <Select
           itemListRenderer={this._renderMenu}
-          items={playlists.items}
+          items={playlists}
           itemPredicate={this._predicate}
           itemRenderer={this._renderMenuItem}
           noResults={<MenuItem disabled={true} text="No results." />}
@@ -121,7 +143,11 @@ class PlaylistSelector extends Component {
           }}
         >
           <Button
-            icon={playlist ? <img className="PlaylistSelector_albumRightImage" src={_.get(playlist, 'images.0.url')} /> : null}
+            icon={(loading && total)
+              ? (<Spinner size={30} value={playlists.length / total} />)
+              : (playlist
+                ? <img className="PlaylistSelector_albumRightImage" src={_.get(playlist, 'images.0.url')} />
+                : null)}
             rightIcon="caret-down"
             text={playlist ? `${playlist.name}` : '(No selection)'}
             large
