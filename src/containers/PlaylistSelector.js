@@ -87,6 +87,7 @@ class PlaylistSelector extends Component {
   }
 
   _renderMenuItem = (playlist, { handleClick, modifiers, query }) => {
+    const { playlists } = this.state;
     if (!modifiers.matchesPredicate) {
       return null;
     }
@@ -99,7 +100,7 @@ class PlaylistSelector extends Component {
         text={text}
         shouldDismissPopover={false}
         text={this._highlightText(text, query)}
-        labelElement={<img className="PlaylistSelector_albumRightImage" src={_.get(playlist, 'images.0.url')} />}
+        labelElement={playlists.length > 200 ? null : <img className="PlaylistSelector_albumRightImage" src={_.get(playlist, 'images.0.url')} />}
       />
     );
   };
