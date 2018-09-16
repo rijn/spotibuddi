@@ -64,10 +64,11 @@ def static_file(path):
     else:
         return send_from_directory('build/static', path)
 
+@app.route('/api/user/<user>/playlists/<offset>')
 @app.route('/api/user/<user>/playlists')
 @crossdomain(origin='*')
-def playlists(user):
-    playlists = sp.user_playlists(user)
+def playlists(user, offset = 0):
+    playlists = sp.user_playlists(user, offset = offset)
     response = app.response_class(
         response = json.dumps(playlists),
         status = 200,
