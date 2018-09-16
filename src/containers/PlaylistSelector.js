@@ -124,6 +124,8 @@ class PlaylistSelector extends Component {
             icon={playlist ? <img className="PlaylistSelector_albumRightImage" src={_.get(playlist, 'images.0.url')} /> : null}
             rightIcon="caret-down"
             text={playlist ? `${playlist.name}` : '(No selection)'}
+            large
+            fill
           />
         </Select>
       </div>

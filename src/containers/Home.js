@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { InputGroup, Button, Intent, Callout, Spinner, Alert } from '@blueprintjs/core';
+import { InputGroup, Button, Intent, Callout, Spinner, Alert, H1, Card } from '@blueprintjs/core';
 import { fetchUser } from '../api';
 import UsernameAndPlaylistInputModule from './UsernameAndPlaylistInputModule';
+import '../styles/Home.css';
 
 class Home extends Component {
   state = {
@@ -17,7 +18,18 @@ class Home extends Component {
     const { username } = this.state;
     return (
       <div className="Home">
-        <UsernameAndPlaylistInputModule />
+        <H1 style={{ color: 'white' }}>spotibuddi</H1>
+        <Card
+          className="Home_usernameAndPlaylistInputModuleContainer"
+          interactive
+        >
+          <div className="Home_usernameAndPlaylistInputModule">
+            <UsernameAndPlaylistInputModule />
+          </div>
+          <div className="Home_usernameAndPlaylistInputModule">
+            <UsernameAndPlaylistInputModule />
+          </div>
+        </Card>
       </div>
     );
   }

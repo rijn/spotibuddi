@@ -1,0 +1,24 @@
+.UsernameAndPlaylistInputModule > *{
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 250px;
+  float: right;
+  margin: 0 3px;
+}
+
+.UsernameAndPlaylistInputModule_userProfileImage {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  margin: 5px;
+  border-radius: 3px;
+}
+
+.UsernameAndPlaylistInputModule_userDisplayName {
+  line-height: 40px;
+  margin: 5px;
+  color: #aaa;
+}

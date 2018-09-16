@@ -1,3 +1,14 @@
 .Home_conatiner {
   padding-top: 3em;
 }
+
+.Home_usernameAndPlaylistInputModuleContainer {
+  position: absolute;
+  right: 100px;
+  bottom: 100px;
+}
+
+.Home_usernameAndPlaylistInputModule {
+  height: 40px;
+  margin: 1em;
+}

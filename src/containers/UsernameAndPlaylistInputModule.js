@@ -1,8 +1,10 @@
+import '../styles/UsernameAndPlaylistInputModule.css';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { InputGroup, Button, Intent, Callout, Spinner, Alert } from '@blueprintjs/core';
 import { fetchUser } from '../api';
 import PlaylistSelector from './PlaylistSelector';
+import _ from 'lodash';
 import Promise from 'bluebird';
 Promise.config({
     cancellation: true
@@ -73,19 +75,20 @@ class UsernameAndPlaylistInputModule extends Component {
   }
 
   render () {
-    const { username } = this.state;
+    const { username, user } = this.state;
     return (
       <div className="UsernameAndPlaylistInputModule">
+        { this._renderPlaylistSelector() }
         <InputGroup
-          placeholder="Enter your spotify username..."
+          placeholder="Enter spotify username..."
           type="text"
           onChange={this._handleUsernameChange}
           value={this.state.username}
+          large
+          leftIcon={user ? (_.get(user, 'images.0.url') ? <img className="UsernameAndPlaylistInputModule_userProfileImage" src={_.get(user, 'images.0.url')} /> : 'tick') : null}
+          rightElement={<span className="UsernameAndPlaylistInputModule_userDisplayName">{ _.get(user, 'display_name') || '' }</span>}
         />
-        { this._renderUserProfileCard() }
-        <div>
-          { this._renderPlaylistSelector() }
-        </div>
+        {/* { this._renderUserProfileCard() } */}
       </div>
     );
   }
